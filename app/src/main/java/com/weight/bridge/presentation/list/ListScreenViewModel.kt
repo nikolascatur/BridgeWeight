@@ -2,6 +2,7 @@ package com.weight.bridge.presentation.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weight.bridge.data.local.dao.BridgeTicketDao
 import com.weight.bridge.domain.manager.RepositoryManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,18 @@ class ListScreenViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = MutableStateFlow(ListScreenState())
     val state = _state.asStateFlow()
+
+    fun onEvent(event: ListScreenEvent) {
+        when(event) {
+            is ListScreenEvent.DeleteAction -> deleteTicket(event.dao)
+        }
+    }
+
+    fun deleteTicket(dao: BridgeTicketDao) {
+        viewModelScope.launch {
+            manager.deleteTicket(dao)
+        }
+    }
 
     fun getAllTicket() {
         viewModelScope.launch {

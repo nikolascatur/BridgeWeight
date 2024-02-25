@@ -30,7 +30,13 @@ class RealmRepositoryImpl(private val realm: Realm) : RealmRepository {
 
     override suspend fun getTicket(id: String): BridgeTicketDao? {
         val list = realm.query<BridgeTicketDao>("primaryCode == $0", id).find()
-        return if(list.isNotEmpty()) list.first() else null
+        return if (list.isNotEmpty()) list.first() else null
+    }
+
+    override suspend fun deleteTicket(dao: BridgeTicketDao) {
+        realm.write {
+            findLatest(dao)?.also { delete(it) }
+        }
     }
 
     override fun getAllTicket(): Flow<List<BridgeTicketDao>> {

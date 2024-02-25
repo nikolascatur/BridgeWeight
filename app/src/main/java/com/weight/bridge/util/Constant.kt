@@ -11,4 +11,11 @@ object Constant  {
     const val BUNDLE_ID = "bundle_id"
     const val BUNDLE_MODE = "bundle_mode"
 
+    const val COLUMN_TIMEENTER = 0
+    const val COLUMN_TRUCKLICENSENUMBER = 1
+    const val COLUMN_DRIVERNAME = 2
+    const val COLUMN_INBOUNDWEIGHT = 3
+    const val COLUMN_OUTBOUNDWEIGHT = 4
+    const val COLUMN_NETWEIGHT = 5
+
 }

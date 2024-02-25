@@ -43,7 +43,7 @@ class AddScreenViewModel @Inject constructor(private val repository: RepositoryM
             }
 
             is AddScreenEvent.SaveData -> {
-                saveData()
+                saveData(event.dto)
             }
 
             is AddScreenEvent.SubmitData -> {
@@ -73,20 +73,14 @@ class AddScreenViewModel @Inject constructor(private val repository: RepositoryM
                 inboundWeight = dto?.inboundWeight.orEmpty(),
                 outboundWeight = dto?.outboundWeight.orEmpty(),
             )
+            _state.value = _state.value.copy(isGetData = true)
         }
     }
 
-    fun saveData() {
+    fun saveData(dto: BridgeTicketDto) {
         viewModelScope.launch {
             repository.editTicket(
-                BridgeTicketDto(
-                    primaryCode = _state.value.primaryCode,
-                    timeEnter = _state.value.timeEnter,
-                    truckLicenseNumber = _state.value.truckLicenseNumber,
-                    driverName = _state.value.driverName,
-                    inboundWeight = _state.value.inboundWeight,
-                    outboundWeight = _state.value.outboundWeight
-                )
+                dto
             )
             _state.value = _state.value.copy(isSubmitSuccess = true)
         }

@@ -1,5 +1,7 @@
 package com.weight.bridge.presentation.list
 
-sealed class ListScreenEvent {
+import com.weight.bridge.data.local.dao.BridgeTicketDao
 
+sealed class ListScreenEvent {
+    data class DeleteAction(val dao: BridgeTicketDao): ListScreenEvent()
 }

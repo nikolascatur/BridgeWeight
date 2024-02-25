@@ -14,5 +14,6 @@ data class AddScreenState(
 
     val isSubmitSuccess: Boolean = false,
     val isEnableButton: Boolean = false,
+    val isGetData: Boolean = false,
     val isError: Exception? = null
 )

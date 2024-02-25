@@ -18,6 +18,8 @@ class RepositoryManager(private val realmRepository: RealmRepository) {
     suspend fun getTicket(id: String): BridgeTicketDto? =
         realmRepository.getTicket(id)?.toBridgetTicketDto()
 
+    suspend fun deleteTicket(dao: BridgeTicketDao) = realmRepository.deleteTicket(dao)
+
     fun getAllTicket(): Flow<List<BridgeTicketDao>> = realmRepository.getAllTicket()
 
 }

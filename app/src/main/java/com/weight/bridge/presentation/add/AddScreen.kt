@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.weight.bridge.R
+import com.weight.bridge.domain.dto.BridgeTicketDto
 import com.weight.bridge.presentation.component.TextFieldRow
 import com.weight.bridge.presentation.component.TextFieldRowKg
 import com.weight.bridge.presentation.component.ToolbarBackButton
@@ -57,6 +58,21 @@ fun AddScreen(
         if (state.isSubmitSuccess) {
             navHostController.navigateUp()
         }
+    }
+
+    val editState = remember {
+        mutableStateOf(BridgeTicketDto())
+    }
+
+    LaunchedEffect(key1 = state.isGetData) {
+        editState.value = BridgeTicketDto(
+            primaryCode = state.primaryCode,
+            timeEnter = state.timeEnter,
+            truckLicenseNumber = state.truckLicenseNumber,
+            driverName = state.driverName,
+            inboundWeight = state.inboundWeight,
+            outboundWeight = state.outboundWeight
+        )
     }
 
     val openDialog = remember {
@@ -94,7 +110,11 @@ fun AddScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(10.dp),
-                value = state.timeEnter.convertDate(),
+                value = if (isEditMode(state.mode)) {
+                    editState.value.timeEnter.convertDate()
+                } else {
+                    state.timeEnter.convertDate()
+                },
                 onValueChange = {},
                 enabled = false,
                 trailingIcon = {
@@ -108,38 +128,94 @@ fun AddScreen(
             )
             DialogPickerDate(openDialog = openDialog.value, onClick = { isOpen, time ->
                 openDialog.value = isOpen
-                event(AddScreenEvent.InputData(state = state.copy(timeEnter = time.orZero())))
+                if (isEditMode(state.mode)) {
+                    editState.value = editState.value.copy(timeEnter = time.orZero())
+                } else {
+                    event(
+                        AddScreenEvent.InputData(
+                            state = state.copy(timeEnter = time.orZero())
+                        )
+                    )
+                }
             })
             TextFieldRow(
                 context.getString(R.string.label_truck_license_number),
-                value = state.truckLicenseNumber,
+                value = if (isEditMode(state.mode)) {
+                    editState.value.truckLicenseNumber
+                } else {
+                    state.truckLicenseNumber
+                },
                 isEnable = isCanEditMode(state.mode),
                 onChange = {
-                    event(AddScreenEvent.InputData(state.copy(truckLicenseNumber = it)))
+                    if (isEditMode(state.mode)) {
+                        editState.value = editState.value.copy(truckLicenseNumber = it)
+                    } else {
+                        event(
+                            AddScreenEvent.InputData(
+                                state.copy(truckLicenseNumber = it)
+                            )
+                        )
+                    }
                 }
             )
             TextFieldRow(
                 context.getString(R.string.label_driver_name),
-                value = state.driverName,
+                value = if (isEditMode(state.mode)) {
+                    editState.value.driverName
+                } else {
+                    state.driverName
+                },
                 isEnable = isCanEditMode(state.mode),
                 onChange = {
-                    event(AddScreenEvent.InputData(state.copy(driverName = it)))
+                    if (isEditMode(state.mode)) {
+                        editState.value = editState.value.copy(driverName = it)
+                    } else {
+                        event(
+                            AddScreenEvent.InputData(
+                                state.copy(driverName = it)
+                            )
+                        )
+                    }
                 })
             TextFieldRowKg(
                 context.getString(R.string.label_inbound_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                value = state.inboundWeight,
+                value = if (isEditMode(state.mode)) {
+                    editState.value.inboundWeight
+                } else {
+                    state.inboundWeight
+                },
                 isEnable = isCanEditMode(state.mode),
                 onChange = {
-                    event(AddScreenEvent.InputData(state.copy(inboundWeight = it)))
+                    if (isEditMode(state.mode)) {
+                        editState.value = editState.value.copy(inboundWeight = it)
+                    } else {
+                        event(
+                            AddScreenEvent.InputData(
+                                state.copy(inboundWeight = it)
+                            )
+                        )
+                    }
                 }
             )
             TextFieldRowKg(context.getString(R.string.label_outbound_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                value = state.outboundWeight,
+                value = if (isEditMode(state.mode)) {
+                    editState.value.outboundWeight
+                } else {
+                    state.outboundWeight
+                },
                 isEnable = isCanEditMode(state.mode),
                 onChange = {
-                    event(AddScreenEvent.InputData(state.copy(outboundWeight = it)))
+                    if (isEditMode(state.mode)) {
+                        editState.value = editState.value.copy(outboundWeight = it)
+                    } else {
+                        event(
+                            AddScreenEvent.InputData(
+                                state.copy(outboundWeight = it)
+                            )
+                        )
+                    }
                 })
             TextFieldRowKg(context.getString(R.string.label_net_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -152,11 +228,11 @@ fun AddScreen(
                     Button(
                         onClick = {
                             when (state.mode) {
-                                Constant.EDIT_MODE -> event(AddScreenEvent.SaveData)
+                                Constant.EDIT_MODE -> event(AddScreenEvent.SaveData(editState.value))
                                 Constant.ADD_MODE -> event(AddScreenEvent.SubmitData)
                             }
                         },
-                        enabled = state.isEnableButton
+                        enabled = isEditMode(state.mode) || state.isEnableButton
                     ) {
                         when (state.mode) {
                             Constant.EDIT_MODE -> Text(text = context.getString(R.string.label_save_ticket))
@@ -175,6 +251,8 @@ fun isCanEditMode(mode: Int): Boolean {
         else -> true
     }
 }
+
+fun isEditMode(mode: Int): Boolean = mode == Constant.EDIT_MODE
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

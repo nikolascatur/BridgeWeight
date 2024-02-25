@@ -21,7 +21,11 @@ import com.weight.bridge.presentation.theme.WightBridgeTheme
 import com.weight.bridge.util.Constant
 
 @Composable
-fun ListScreen(navHostController: NavHostController, tickets: List<BridgeTicketDao>) {
+fun ListScreen(
+    navHostController: NavHostController,
+    tickets: List<BridgeTicketDao>,
+    event: (ListScreenEvent) -> Unit
+) {
     Scaffold(topBar = {
         SearchBar(
             modifier = Modifier.padding(20.dp),
@@ -31,7 +35,13 @@ fun ListScreen(navHostController: NavHostController, tickets: List<BridgeTicketD
 
         }
     }, floatingActionButton = {
-        FloatingActionButton(onClick = { navHostController.navigate(Route.AddScreen.route) }) {
+        FloatingActionButton(onClick = {
+            navigateToDetail(
+                navHostController,
+                "",
+                Constant.ADD_MODE
+            )
+        }) {
             Icon(imageVector = Icons.Filled.Add, contentDescription = "")
         }
     }) { padding ->
@@ -40,6 +50,8 @@ fun ListScreen(navHostController: NavHostController, tickets: List<BridgeTicketD
                 ListItemComponent(bridgeTicket = tickets[it], index = it) { mode ->
                     if (mode != Constant.DELETE_MODE) {
                         navigateToDetail(navHostController, tickets[it].primaryCode, mode)
+                    } else {
+                        event(ListScreenEvent.DeleteAction(tickets[it]))
                     }
                 }
             }
@@ -63,6 +75,6 @@ private fun navigateToDetail(
 @Composable
 fun previewListScreen() {
     WightBridgeTheme {
-        ListScreen(NavHostController(LocalContext.current), emptyList())
+        ListScreen(NavHostController(LocalContext.current), emptyList(), {})
     }
 }
