@@ -7,6 +7,6 @@ interface RealmRepository {
 
     suspend fun createTicket(bridgeTicketDao: BridgeTicketDao)
     suspend fun editTicket(primaryKey: String, bridgeTicketDao: BridgeTicketDao)
-    suspend fun getTicket(id: String): BridgeTicketDao
+    suspend fun getTicket(id: String): BridgeTicketDao?
     fun getAllTicket(): Flow<List<BridgeTicketDao>>
 }

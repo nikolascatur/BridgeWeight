@@ -1,14 +1,20 @@
 package com.weight.bridge.presentation.list.component
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,13 +29,22 @@ import com.weight.bridge.data.local.dao.BridgeTicketDao
 import com.weight.bridge.presentation.theme.Pink80
 import com.weight.bridge.presentation.theme.Purple80
 import com.weight.bridge.presentation.theme.WightBridgeTheme
+import com.weight.bridge.util.Constant
 import com.weight.bridge.util.convertDate
 import com.weight.bridge.util.toNormalizeString
 
 @Composable
-fun ListItemComponent(bridgeTicket: BridgeTicketDao, index: Int) {
+fun ListItemComponent(
+    bridgeTicket: BridgeTicketDao,
+    index: Int,
+    clickItem: (Int) -> Unit
+) {
     Card(
-        modifier = Modifier.padding(10.dp), colors = CardDefaults.cardColors(
+        modifier = Modifier
+            .padding(10.dp)
+            .clickable {
+                clickItem(Constant.VIEW_MODE)
+            }, colors = CardDefaults.cardColors(
             if (index % 2 == 0) {
                 Purple80
             } else {
@@ -51,6 +66,13 @@ fun ListItemComponent(bridgeTicket: BridgeTicketDao, index: Int) {
                     text = bridgeTicket.driverName,
                     style = MaterialTheme.typography.titleLarge.copy(fontStyle = FontStyle.Italic)
                 )
+                Spacer(modifier = Modifier.width(10.dp))
+                Icon(modifier = Modifier.clickable {
+                    clickItem(Constant.EDIT_MODE)
+                }, imageVector = Icons.Filled.Edit, contentDescription = null)
+                Icon(modifier = Modifier.clickable {
+                    clickItem(Constant.DELETE_MODE)
+                }, imageVector = Icons.Filled.Delete, contentDescription = null)
             }
             Canvas(modifier = Modifier.fillMaxWidth(), onDraw = {
                 val canvasWidth = size.width
@@ -81,6 +103,8 @@ fun PreviewListItemComponent() {
                 inboundWeight = 100.0
                 outboundWeight = 50.0
             }, 1
-        )
+        ) {
+
+        }
     }
 }

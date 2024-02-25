@@ -28,9 +28,9 @@ class RealmRepositoryImpl(private val realm: Realm) : RealmRepository {
         }
     }
 
-    override suspend fun getTicket(id: String): BridgeTicketDao {
-        return realm.query<BridgeTicketDao>("primaryCode == $0", id).find().first()
-
+    override suspend fun getTicket(id: String): BridgeTicketDao? {
+        val list = realm.query<BridgeTicketDao>("primaryCode == $0", id).find()
+        return if(list.isNotEmpty()) list.first() else null
     }
 
     override fun getAllTicket(): Flow<List<BridgeTicketDao>> {

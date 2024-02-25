@@ -39,6 +39,7 @@ import com.weight.bridge.presentation.component.TextFieldRow
 import com.weight.bridge.presentation.component.TextFieldRowKg
 import com.weight.bridge.presentation.component.ToolbarBackButton
 import com.weight.bridge.presentation.theme.WightBridgeTheme
+import com.weight.bridge.util.Constant
 import com.weight.bridge.util.convertDate
 import com.weight.bridge.util.orZero
 import java.text.SimpleDateFormat
@@ -64,7 +65,12 @@ fun AddScreen(
     val scrollable = rememberScrollState()
     ToolbarBackButton(
         navHostController = navHostController,
-        title = context.getString(R.string.title_add)
+        title = when (state.mode) {
+            Constant.ADD_MODE -> context.getString(R.string.title_add)
+            Constant.VIEW_MODE -> context.getString(R.string.title_detail)
+            Constant.EDIT_MODE -> context.getString(R.string.title_edit)
+            else -> ""
+        }
     ) { padding ->
 
         Column(
@@ -96,7 +102,7 @@ fun AddScreen(
                         imageVector = Icons.Filled.DateRange,
                         contentDescription = null,
                         modifier = Modifier.clickable {
-                            openDialog.value = true
+                            openDialog.value = isCanEditMode(state.mode)
                         })
                 }
             )
@@ -107,6 +113,7 @@ fun AddScreen(
             TextFieldRow(
                 context.getString(R.string.label_truck_license_number),
                 value = state.truckLicenseNumber,
+                isEnable = isCanEditMode(state.mode),
                 onChange = {
                     event(AddScreenEvent.InputData(state.copy(truckLicenseNumber = it)))
                 }
@@ -114,6 +121,7 @@ fun AddScreen(
             TextFieldRow(
                 context.getString(R.string.label_driver_name),
                 value = state.driverName,
+                isEnable = isCanEditMode(state.mode),
                 onChange = {
                     event(AddScreenEvent.InputData(state.copy(driverName = it)))
                 })
@@ -121,6 +129,7 @@ fun AddScreen(
                 context.getString(R.string.label_inbound_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = state.inboundWeight,
+                isEnable = isCanEditMode(state.mode),
                 onChange = {
                     event(AddScreenEvent.InputData(state.copy(inboundWeight = it)))
                 }
@@ -128,6 +137,7 @@ fun AddScreen(
             TextFieldRowKg(context.getString(R.string.label_outbound_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 value = state.outboundWeight,
+                isEnable = isCanEditMode(state.mode),
                 onChange = {
                     event(AddScreenEvent.InputData(state.copy(outboundWeight = it)))
                 })
@@ -137,15 +147,32 @@ fun AddScreen(
                 value = state.netWeight,
                 onChange = {})
 
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Button(
-                    onClick = { event(AddScreenEvent.SubmitData) },
-                    enabled = state.isEnableButton
-                ) {
-                    Text(text = context.getString(R.string.label_create_ticket))
+            if (isCanEditMode(state.mode)) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Button(
+                        onClick = {
+                            when (state.mode) {
+                                Constant.EDIT_MODE -> event(AddScreenEvent.SaveData)
+                                Constant.ADD_MODE -> event(AddScreenEvent.SubmitData)
+                            }
+                        },
+                        enabled = state.isEnableButton
+                    ) {
+                        when (state.mode) {
+                            Constant.EDIT_MODE -> Text(text = context.getString(R.string.label_save_ticket))
+                            Constant.ADD_MODE -> Text(text = context.getString(R.string.label_create_ticket))
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+fun isCanEditMode(mode: Int): Boolean {
+    return when (mode) {
+        Constant.VIEW_MODE -> false
+        else -> true
     }
 }
 

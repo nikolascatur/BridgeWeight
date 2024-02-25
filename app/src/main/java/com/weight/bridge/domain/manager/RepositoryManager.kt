@@ -15,8 +15,8 @@ class RepositoryManager(private val realmRepository: RealmRepository) {
         realmRepository.editTicket(bridgeTicketDto.primaryCode, toBridgeTicketDao(bridgeTicketDto))
     }
 
-    suspend fun getTicket(id: String): BridgeTicketDto =
-        realmRepository.getTicket(id).toBridgetTicketDto()
+    suspend fun getTicket(id: String): BridgeTicketDto? =
+        realmRepository.getTicket(id)?.toBridgetTicketDto()
 
     fun getAllTicket(): Flow<List<BridgeTicketDao>> = realmRepository.getAllTicket()
 

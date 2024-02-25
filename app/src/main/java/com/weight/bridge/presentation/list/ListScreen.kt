@@ -18,6 +18,7 @@ import com.weight.bridge.presentation.graph.Route
 import com.weight.bridge.presentation.list.component.ListItemComponent
 import com.weight.bridge.presentation.list.component.SearchBar
 import com.weight.bridge.presentation.theme.WightBridgeTheme
+import com.weight.bridge.util.Constant
 
 @Composable
 fun ListScreen(navHostController: NavHostController, tickets: List<BridgeTicketDao>) {
@@ -34,13 +35,28 @@ fun ListScreen(navHostController: NavHostController, tickets: List<BridgeTicketD
             Icon(imageVector = Icons.Filled.Add, contentDescription = "")
         }
     }) { padding ->
-        LazyColumn(content = {
+        LazyColumn(modifier = Modifier.padding(top = padding.calculateTopPadding()), content = {
             items(tickets.size) {
-                ListItemComponent(bridgeTicket = tickets[it], index = it)
+                ListItemComponent(bridgeTicket = tickets[it], index = it) { mode ->
+                    if (mode != Constant.DELETE_MODE) {
+                        navigateToDetail(navHostController, tickets[it].primaryCode, mode)
+                    }
+                }
             }
         })
     }
+}
 
+private fun navigateToDetail(
+    navHostController: NavHostController,
+    primaryCode: String,
+    mode: Int
+) {
+    with(navHostController) {
+        currentBackStackEntry?.savedStateHandle?.set(Constant.BUNDLE_ID, primaryCode)
+        currentBackStackEntry?.savedStateHandle?.set(Constant.BUNDLE_MODE, mode)
+        navigate(Route.AddScreen.route)
+    }
 }
 
 @Preview
