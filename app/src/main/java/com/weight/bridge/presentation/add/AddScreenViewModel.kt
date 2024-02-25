@@ -23,12 +23,14 @@ class AddScreenViewModel @Inject constructor(private val repository: RepositoryM
         when (event) {
             is AddScreenEvent.InputData -> {
                 _state.update { currentState ->
+
                     currentState.copy(
                         timeEnter = event.state.timeEnter,
                         truckLicenseNumber = event.state.truckLicenseNumber,
                         driverName = event.state.driverName,
                         inboundWeight = event.state.inboundWeight,
                         outboundWeight = event.state.outboundWeight,
+                        isEnableButton = event.state.truckLicenseNumber.isNotEmpty() && event.state.driverName.isNotEmpty() && event.state.inboundWeight.isNotEmpty() && event.state.outboundWeight.isNotEmpty()
                     )
                 }
             }
@@ -56,6 +58,9 @@ class AddScreenViewModel @Inject constructor(private val repository: RepositoryM
         viewModelScope.launch {
             try {
                 repository.createTicket(ticket)
+                _state.update { currentState ->
+                    currentState.copy(isSubmitSuccess = true)
+                }
             } catch (ex: Exception) {
                 _state.value = _state.value.copy(
                     isError = ex

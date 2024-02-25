@@ -3,6 +3,7 @@ package com.weight.bridge.presentation.component
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -84,13 +85,14 @@ fun TextFieldRowKg(
 
         Row {
             OutlinedTextField(
+                modifier = Modifier.weight(2f),
                 value = value,
                 keyboardOptions = keyboardOptions,
                 onValueChange = onChange,
                 enabled = isEnable
             )
             Box(
-                modifier = Modifier
+                modifier = Modifier.weight(1f)
                     .height(50.dp)
                     .padding(start = 20.dp),
                 contentAlignment = Alignment.Center

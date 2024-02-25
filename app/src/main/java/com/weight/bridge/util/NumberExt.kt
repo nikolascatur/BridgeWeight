@@ -1,6 +1,9 @@
 package com.weight.bridge.util
 
 import com.weight.bridge.util.Constant.NUMBER_ONLY_PATTERN
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.regex.Pattern
 
 fun Double.toNormalizeString(): String {
@@ -24,3 +27,22 @@ fun String.toNormalizeDouble(): Double {
 fun String.isNumberOnly(): Boolean {
     return Pattern.compile(NUMBER_ONLY_PATTERN).matcher(this).matches()
 }
+
+fun Long?.convertDate(
+    outputFormat: String = "dd MMMM yyyy",
+    localeId: Locale = Locale("id", "ID")
+): String {
+    if (this != null) {
+        try {
+            val requiredFormat = SimpleDateFormat(outputFormat, localeId)
+            return requiredFormat.format(Date(this))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    return "-"
+}
+
+fun Long?.orZero(): Long = this?.let {
+    this
+} ?: 0L

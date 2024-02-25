@@ -1,7 +1,7 @@
 package com.weight.bridge.presentation.add
 
 data class AddScreenState(
-    val timeEnter: Long = 0L,
+    val timeEnter: Long = System.currentTimeMillis(),
     val truckLicenseNumber: String = "",
     val driverName: String = "",
     val inboundWeight: String = "",
