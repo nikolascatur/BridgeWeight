@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_add">Create Ticket</string>
+    <string name="title_edit">Edit Ticket</string>
+    <string name="label_time_enter">Enter Time</string>
+    <string name="label_truck_license_number">Truck License Number</string>
+    <string name="label_driver_name">Driver Name</string>
+    <string name="label_inbound_weight">Inbound Weight</string>
+    <string name="label_outbound_weight">Outbound Weight</string>
+    <string name="label_net_weight">Net Weight</string>
+    <string name="label_create_ticket">Create Ticket</string>
+</resources>
