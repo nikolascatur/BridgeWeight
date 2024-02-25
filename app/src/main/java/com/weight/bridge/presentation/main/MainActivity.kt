@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
                             val viewModel: ListScreenViewModel = hiltViewModel()
                             viewModel.getAllTicket()
                             val state = viewModel.state.collectAsStateWithLifecycle().value
-                            ListScreen(navController, state.listItem, viewModel::onEvent)
+                            ListScreen(navController, state.listItem, state, viewModel::onEvent)
                         }
                         composable(Route.AddScreen.route) {
                             val viewModel: AddScreenViewModel = hiltViewModel()

@@ -8,6 +8,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,14 +26,21 @@ import com.weight.bridge.util.Constant
 fun ListScreen(
     navHostController: NavHostController,
     tickets: List<BridgeTicketDao>,
-    event: (ListScreenEvent) -> Unit
+    state: ListScreenState,
+    event: (ListScreenEvent) -> Unit,
 ) {
+    val filter = remember {
+        mutableStateOf("")
+    }
     Scaffold(topBar = {
         SearchBar(
             modifier = Modifier.padding(20.dp),
-            text = "Search",
+            text = filter.value,
             readOnly = false,
-            onValueChange = {}) {
+            onValueChange = {
+                filter.value = it
+                event(ListScreenEvent.FilterAction(filter.value))
+            }) {
 
         }
     }, floatingActionButton = {
@@ -46,12 +55,22 @@ fun ListScreen(
         }
     }) { padding ->
         LazyColumn(modifier = Modifier.padding(top = padding.calculateTopPadding()), content = {
-            items(tickets.size) {
-                ListItemComponent(bridgeTicket = tickets[it], index = it) { mode ->
+            val size = if (filter.value.isEmpty()) {
+                tickets.size
+            } else {
+                state.filtering.size
+            }
+            val listData = if (filter.value.isEmpty()) {
+                tickets
+            } else {
+                state.filtering
+            }
+            items(size) {
+                ListItemComponent(bridgeTicket = listData[it], index = it) { mode ->
                     if (mode != Constant.DELETE_MODE) {
-                        navigateToDetail(navHostController, tickets[it].primaryCode, mode)
+                        navigateToDetail(navHostController, listData[it].primaryCode, mode)
                     } else {
-                        event(ListScreenEvent.DeleteAction(tickets[it]))
+                        event(ListScreenEvent.DeleteAction(listData[it]))
                     }
                 }
             }
@@ -75,6 +94,6 @@ private fun navigateToDetail(
 @Composable
 fun previewListScreen() {
     WightBridgeTheme {
-        ListScreen(NavHostController(LocalContext.current), emptyList(), {})
+        ListScreen(NavHostController(LocalContext.current), emptyList(), ListScreenState(), {})
     }
 }
