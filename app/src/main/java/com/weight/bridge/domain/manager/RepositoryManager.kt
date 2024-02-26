@@ -1,6 +1,10 @@
 package com.weight.bridge.domain.manager
 
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.weight.bridge.data.local.dao.BridgeTicketDao
+import com.weight.bridge.data.remote.model.BridgeTicket
 import com.weight.bridge.domain.dto.BridgeTicketDto
 import com.weight.bridge.domain.repository.FirebaseRepository
 import com.weight.bridge.domain.repository.RealmRepository
@@ -17,6 +21,11 @@ class RepositoryManager(
         firebaseRepository.saveTicket(bridgeTicketDto.toBridgeTicket(dao.primaryCode))
     }
 
+    suspend fun saveToLocal(bridgeTicketDto: BridgeTicketDto) {
+        val dao = toBridgeTicketDao(bridgeTicketDto)
+        realmRepository.createTicket(dao)
+    }
+
     suspend fun editTicket(bridgeTicketDto: BridgeTicketDto) {
         realmRepository.editTicket(bridgeTicketDto.primaryCode, toBridgeTicketDao(bridgeTicketDto))
         firebaseRepository.saveTicket(bridgeTicketDto.toBridgeTicket(bridgeTicketDto.primaryCode))
@@ -26,11 +35,36 @@ class RepositoryManager(
         realmRepository.getTicket(id)?.toBridgetTicketDto()
 
     suspend fun deleteTicket(dao: BridgeTicketDao) {
-        realmRepository.deleteTicket(dao)
         firebaseRepository.removeTicket(dao.primaryCode)
+        realmRepository.deleteTicket(dao)
     }
 
     fun getAllTicket(sortBy: String): Flow<List<BridgeTicketDao>> =
         realmRepository.getAllTicket(sortBy)
+
+    suspend fun syncFromServer() {
+        val list = arrayListOf<BridgeTicketDto>()
+        firebaseRepository.getDatabasePreference().child("data")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    snapshot.children.forEach { value ->
+                        value.getValue(BridgeTicket::class.java)?.let { data ->
+                            list.add(data.toBridgeTicketDto())
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+        list.forEach {
+            val ticket = getTicket(it.primaryCode)
+            if (ticket == null) {
+                saveToLocal(it)
+            }
+        }
+    }
 
 }

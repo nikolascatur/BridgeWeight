@@ -33,3 +33,11 @@ fun BridgeTicketDto.toBridgeTicket(primaryCode: String) = BridgeTicket(
     outboundWeight = outboundWeight.toNormalizeDouble(),
     primaryCode = primaryCode
 )
+
+fun BridgeTicket.toBridgeTicketDto() = BridgeTicketDto(
+    timeEnter = timeEnter,
+    truckLicenseNumber = truckLicenseNumber,
+    driverName = driverName,
+    inboundWeight = inboundWeight.toNormalizeString(),
+    outboundWeight = outboundWeight.toNormalizeString()
+)

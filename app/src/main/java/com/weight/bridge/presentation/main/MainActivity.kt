@@ -16,6 +16,8 @@ import com.weight.bridge.presentation.add.AddScreenViewModel
 import com.weight.bridge.presentation.graph.Route
 import com.weight.bridge.presentation.list.ListScreen
 import com.weight.bridge.presentation.list.ListScreenViewModel
+import com.weight.bridge.presentation.splash.SplashScreen
+import com.weight.bridge.presentation.splash.SplashViewModel
 import com.weight.bridge.presentation.theme.WightBridgeTheme
 import com.weight.bridge.util.Constant
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,8 +33,13 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
                 NavHost(navController = navController, startDestination = Route.MainNav.route) {
                     navigation(
-                        route = Route.MainNav.route, startDestination = Route.ListScreen.route
+                        route = Route.MainNav.route, startDestination = Route.SplashScreen.route
                     ) {
+                        composable(Route.SplashScreen.route) {
+                            val viewModel: SplashViewModel = hiltViewModel()
+                            viewModel.syncFromServer()
+                            SplashScreen(navController, viewModel.isFinish)
+                        }
                         composable(Route.ListScreen.route) {
                             val viewModel: ListScreenViewModel = hiltViewModel()
                             viewModel.getAllTicket()
@@ -60,9 +67,6 @@ class MainActivity : ComponentActivity() {
                                 state = state,
                                 event = viewModel::onEvent
                             )
-                        }
-                        composable(Route.EditScreen.route) {
-
                         }
                     }
                 }

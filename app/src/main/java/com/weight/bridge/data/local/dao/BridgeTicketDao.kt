@@ -13,4 +13,6 @@ class BridgeTicketDao : RealmObject {
     var inboundWeight: Double = 0.0
     var outboundWeight: Double = 0.0
     var primaryCode: String = _id.toHexString()
+    var deleteLocallyTime: Long = 0
+    var updateDataTime: Long = 0
 }

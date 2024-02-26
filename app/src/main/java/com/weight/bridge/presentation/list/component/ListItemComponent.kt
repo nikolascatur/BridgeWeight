@@ -66,13 +66,6 @@ fun ListItemComponent(
                     text = bridgeTicket.driverName,
                     style = MaterialTheme.typography.titleLarge.copy(fontStyle = FontStyle.Italic)
                 )
-                Spacer(modifier = Modifier.width(10.dp))
-                Icon(modifier = Modifier.clickable {
-                    clickItem(Constant.EDIT_MODE)
-                }, imageVector = Icons.Filled.Edit, contentDescription = null)
-                Icon(modifier = Modifier.clickable {
-                    clickItem(Constant.DELETE_MODE)
-                }, imageVector = Icons.Filled.Delete, contentDescription = null)
             }
             Canvas(modifier = Modifier.fillMaxWidth(), onDraw = {
                 val canvasWidth = size.width
@@ -87,6 +80,14 @@ fun ListItemComponent(
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = "Inbound: ${bridgeTicket.inboundWeight.toNormalizeString()} kg - Outbound: ${bridgeTicket.outboundWeight.toNormalizeString()}")
             Text(text = bridgeTicket.timeEnter.convertDate())
+            Row {
+                Icon(modifier = Modifier.clickable {
+                    clickItem(Constant.EDIT_MODE)
+                }, imageVector = Icons.Filled.Edit, contentDescription = null)
+                Icon(modifier = Modifier.clickable {
+                    clickItem(Constant.DELETE_MODE)
+                }, imageVector = Icons.Filled.Delete, contentDescription = null)
+            }
         }
     }
 }

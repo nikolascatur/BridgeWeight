@@ -4,7 +4,7 @@ sealed class Route(val route: String) {
 
     object ListScreen : Route("ListScreen")
     object AddScreen : Route("AddScreen")
-    object EditScreen : Route("EditScreen")
+    object SplashScreen : Route("SplashScreen")
 
     object MainNav: Route("MainNav")
 }
