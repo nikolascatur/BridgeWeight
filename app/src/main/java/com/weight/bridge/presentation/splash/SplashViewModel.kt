@@ -15,9 +15,14 @@ class SplashViewModel @Inject constructor(private val manager: RepositoryManager
     private val _isFinish = mutableStateOf(false)
     val isFinish: State<Boolean> = _isFinish
     fun syncFromServer() {
-        viewModelScope.launch {
-            manager.syncFromServer()
-            _isFinish.value = true
+        manager.syncFromServer {
+            viewModelScope.launch {
+                val ticket = manager.getTicket(it.primaryCode)
+                if (ticket == null) {
+                    manager.saveToLocal(it)
+                }
+            }
         }
+        _isFinish.value = true
     }
 }

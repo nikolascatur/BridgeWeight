@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Weight Bridge</string>
     <string name="title_add">Create Ticket</string>
     <string name="title_edit">Edit Ticket</string>
     <string name="title_detail">Detail Ticket</string>
