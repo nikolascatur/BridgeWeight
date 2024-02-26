@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.weight.bridge.domain.dto.BridgeTicketDto
 import com.weight.bridge.domain.manager.RepositoryManager
 import com.weight.bridge.util.orZero
+import com.weight.bridge.util.toNormalizeDouble
+import com.weight.bridge.util.toNormalizeString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +29,7 @@ class AddScreenViewModel @Inject constructor(private val repository: RepositoryM
                     driverName = event.state.driverName,
                     inboundWeight = event.state.inboundWeight,
                     outboundWeight = event.state.outboundWeight,
+                    netWeight = (event.state.inboundWeight.toNormalizeDouble() - event.state.outboundWeight.toNormalizeDouble()).toNormalizeString(),
                     isEnableButton = event.state.truckLicenseNumber.isNotEmpty() && event.state.driverName.isNotEmpty() && event.state.inboundWeight.isNotEmpty() && event.state.outboundWeight.isNotEmpty()
                 )
             }

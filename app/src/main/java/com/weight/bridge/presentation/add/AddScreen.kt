@@ -43,6 +43,8 @@ import com.weight.bridge.presentation.theme.WightBridgeTheme
 import com.weight.bridge.util.Constant
 import com.weight.bridge.util.convertDate
 import com.weight.bridge.util.orZero
+import com.weight.bridge.util.toNormalizeDouble
+import com.weight.bridge.util.toNormalizeString
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -71,7 +73,7 @@ fun AddScreen(
             truckLicenseNumber = state.truckLicenseNumber,
             driverName = state.driverName,
             inboundWeight = state.inboundWeight,
-            outboundWeight = state.outboundWeight
+            outboundWeight = state.outboundWeight,
         )
     }
 
@@ -220,7 +222,7 @@ fun AddScreen(
             TextFieldRowKg(context.getString(R.string.label_net_weight),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 isEnable = false,
-                value = state.netWeight,
+                value = (state.inboundWeight.toNormalizeDouble() - state.outboundWeight.toNormalizeDouble()).toNormalizeString(),
                 onChange = {})
 
             if (isCanEditMode(state.mode)) {
