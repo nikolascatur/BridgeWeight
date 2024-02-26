@@ -16,4 +16,6 @@ object Constant  {
     const val SORT_BY_DRIVER_NAME = "by driver name"
     const val SORT_BY_LICENSE_NUMBER = "by license number"
 
+    const val DATABASE_URL = "https://bridgeweight-e78ea-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
 }

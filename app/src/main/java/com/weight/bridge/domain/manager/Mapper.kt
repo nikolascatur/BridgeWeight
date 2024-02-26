@@ -1,6 +1,7 @@
 package com.weight.bridge.domain.manager
 
 import com.weight.bridge.data.local.dao.BridgeTicketDao
+import com.weight.bridge.data.remote.model.BridgeTicket
 import com.weight.bridge.domain.dto.BridgeTicketDto
 import com.weight.bridge.util.toNormalizeDouble
 import com.weight.bridge.util.toNormalizeString
@@ -23,3 +24,12 @@ fun toBridgeTicketDao(dto: BridgeTicketDto) = BridgeTicketDao().apply {
     inboundWeight = dto.inboundWeight.toNormalizeDouble()
     outboundWeight = dto.outboundWeight.toNormalizeDouble()
 }
+
+fun BridgeTicketDto.toBridgeTicket(primaryCode: String) = BridgeTicket(
+    timeEnter = timeEnter,
+    truckLicenseNumber = truckLicenseNumber,
+    driverName = driverName,
+    inboundWeight = inboundWeight.toNormalizeDouble(),
+    outboundWeight = outboundWeight.toNormalizeDouble(),
+    primaryCode = primaryCode
+)

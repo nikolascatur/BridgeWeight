@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "446558142776",
+    "firebase_url": "https://bridgeweight-e78ea-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "bridgeweight-e78ea",
+    "storage_bucket": "bridgeweight-e78ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446558142776:android:4d14225ab44b6422ec81cd",
+        "android_client_info": {
+          "package_name": "com.weight.bridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0c3_aPHQGpMe60vnVzPAKoPhClypNwfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

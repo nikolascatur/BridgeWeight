@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'io.realm.kotlin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -82,4 +83,6 @@ dependencies {
     implementation "androidx.compose.foundation:foundation-layout:1.6.1"
 
     implementation 'androidx.compose.material3:material3:1.2.0'
+    implementation 'com.google.firebase:firebase-database:20.3.0'
+    implementation "com.google.code.gson:gson:2.8.9"
 }

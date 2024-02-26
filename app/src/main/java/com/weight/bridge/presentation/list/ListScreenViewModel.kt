@@ -1,5 +1,6 @@
 package com.weight.bridge.presentation.list
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -51,14 +52,6 @@ class ListScreenViewModel @Inject constructor(
             manager.deleteTicket(dao)
         }
     }
-
-//    fun getTicketBySort(sortBy: String) {
-//        viewModelScope.launch {
-//            manager.getAllTicket(sortBy).collectLatest { value ->
-//                _state.value = _state.value.copy(filtering = value)
-//            }
-//        }
-//    }
 
     fun getAllTicket() {
         viewModelScope.launch {

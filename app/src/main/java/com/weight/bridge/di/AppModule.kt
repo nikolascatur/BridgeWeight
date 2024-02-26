@@ -1,9 +1,14 @@
 package com.weight.bridge.di
 
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.weight.bridge.data.local.RealmRepositoryImpl
 import com.weight.bridge.data.local.dao.BridgeTicketDao
+import com.weight.bridge.data.remote.RemoteRepositoryImpl
 import com.weight.bridge.domain.manager.RepositoryManager
+import com.weight.bridge.domain.repository.FirebaseRepository
 import com.weight.bridge.domain.repository.RealmRepository
+import com.weight.bridge.util.Constant
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +31,18 @@ object AppModule {
     fun provideRealmRepository(realm: Realm): RealmRepository = RealmRepositoryImpl(realm)
 
 
+//    @Singleton
+//    @Provides
+//    fun provideRealtimeDatabase(): DatabaseReference =
+//        FirebaseDatabase.getInstance().getReferenceFromUrl(Constant.DATABASE_URL)
+
     @Singleton
     @Provides
-    fun provideRepositoryManager(realmRepository: RealmRepository) =
-        RepositoryManager(realmRepository)
+    fun providesFirebaseRepository(): FirebaseRepository =
+        RemoteRepositoryImpl()
+
+    @Singleton
+    @Provides
+    fun provideRepositoryManager(realmRepository: RealmRepository, database: FirebaseRepository) =
+        RepositoryManager(realmRepository, database)
 }
