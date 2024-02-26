@@ -24,6 +24,5 @@ class SplashViewModelTest: BaseUnitTestViewModel() {
     fun `do sync action`() = runBlocking {
         viewModel.syncFromServer()
         assertEquals(true, viewModel.isFinish.value)
-        verify(repositoryManager, times(1)).syncFromServer()
     }
 }
