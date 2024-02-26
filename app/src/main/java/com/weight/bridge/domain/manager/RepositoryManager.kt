@@ -20,6 +20,6 @@ class RepositoryManager(private val realmRepository: RealmRepository) {
 
     suspend fun deleteTicket(dao: BridgeTicketDao) = realmRepository.deleteTicket(dao)
 
-    fun getAllTicket(): Flow<List<BridgeTicketDao>> = realmRepository.getAllTicket()
+    fun getAllTicket(sortBy: String): Flow<List<BridgeTicketDao>> = realmRepository.getAllTicket(sortBy)
 
 }

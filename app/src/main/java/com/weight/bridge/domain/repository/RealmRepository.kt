@@ -11,5 +11,5 @@ interface RealmRepository {
     suspend fun getTicket(id: String): BridgeTicketDao?
 
     suspend fun deleteTicket(dao: BridgeTicketDao)
-    fun getAllTicket(): Flow<List<BridgeTicketDao>>
+    fun getAllTicket(sortBy: String): Flow<List<BridgeTicketDao>>
 }

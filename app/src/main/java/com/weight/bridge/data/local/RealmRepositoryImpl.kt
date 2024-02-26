@@ -1,10 +1,16 @@
 package com.weight.bridge.data.local
 
+import android.util.Log
 import com.weight.bridge.data.local.dao.BridgeTicketDao
 import com.weight.bridge.domain.repository.RealmRepository
+import com.weight.bridge.util.Constant.SORT_BY_DRIVER_NAME
+import com.weight.bridge.util.Constant.SORT_BY_LATEST_NEW
+import com.weight.bridge.util.Constant.SORT_BY_LICENSE_NUMBER
+import com.weight.bridge.util.Constant.SORT_BY_NEW_LATEST
 import io.realm.kotlin.Realm
 import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
+import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -39,7 +45,19 @@ class RealmRepositoryImpl(private val realm: Realm) : RealmRepository {
         }
     }
 
-    override fun getAllTicket(): Flow<List<BridgeTicketDao>> {
-        return realm.query<BridgeTicketDao>().asFlow().map { result -> result.list }
+    override fun getAllTicket(sortBy: String): Flow<List<BridgeTicketDao>> {
+        var query = realm.query<BridgeTicketDao>()
+        Log.d("okhttp","nikoo sortBy : $sortBy")
+        query = when (sortBy) {
+            SORT_BY_NEW_LATEST -> {
+                Log.d("okhttp","nikoo AAAAAAAAAAAAAAAAAAAAAAA")
+                query.sort("timeEnter", Sort.DESCENDING)
+            }
+            SORT_BY_LATEST_NEW -> query.sort("timeEnter", Sort.ASCENDING)
+            SORT_BY_DRIVER_NAME -> query.sort("driverName", Sort.ASCENDING)
+            SORT_BY_LICENSE_NUMBER -> query.sort("truckLicenseNumber", Sort.ASCENDING)
+            else -> query
+        }
+        return query.asFlow().map { result -> result.list }
     }
 }

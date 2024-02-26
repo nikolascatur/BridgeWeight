@@ -11,11 +11,9 @@ object Constant  {
     const val BUNDLE_ID = "bundle_id"
     const val BUNDLE_MODE = "bundle_mode"
 
-    const val COLUMN_TIMEENTER = 0
-    const val COLUMN_TRUCKLICENSENUMBER = 1
-    const val COLUMN_DRIVERNAME = 2
-    const val COLUMN_INBOUNDWEIGHT = 3
-    const val COLUMN_OUTBOUNDWEIGHT = 4
-    const val COLUMN_NETWEIGHT = 5
+    const val SORT_BY_NEW_LATEST = "new to latest"
+    const val SORT_BY_LATEST_NEW = "latest to new"
+    const val SORT_BY_DRIVER_NAME = "by driver name"
+    const val SORT_BY_LICENSE_NUMBER = "by license number"
 
 }
